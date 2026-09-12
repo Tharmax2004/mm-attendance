@@ -32,7 +32,6 @@ export function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | null>(null);
-  const [isPhoneFrame, setIsPhoneFrame] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
 
   // Initialize employees from storage
@@ -133,10 +132,7 @@ export function App() {
   };
 
   return (
-    <PhoneFrame
-      isPhoneFrame={isPhoneFrame}
-      onToggleFrame={() => setIsPhoneFrame(!isPhoneFrame)}
-    >
+    <PhoneFrame>
       {/* App Shell Container */}
       <div className="flex-1 flex flex-col h-full bg-white relative overflow-hidden">
         {/* Top Header with MM Attendance Brand */}

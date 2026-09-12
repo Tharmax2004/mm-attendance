@@ -1,64 +1,31 @@
 import React, { type ReactNode } from 'react';
-import { Smartphone, Monitor } from 'lucide-react';
 
 interface PhoneFrameProps {
   children: ReactNode;
-  isPhoneFrame: boolean;
-  onToggleFrame: () => void;
 }
 
-export const PhoneFrame: React.FC<PhoneFrameProps> = ({
-  children,
-  isPhoneFrame,
-  onToggleFrame,
-}) => {
+export const PhoneFrame: React.FC<PhoneFrameProps> = ({ children }) => {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#12141a] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))] text-gray-900 p-0 sm:p-4 md:p-6 transition-all duration-300">
-      {/* Top Floating Control Bar */}
-      <header className="fixed top-3 z-50 flex items-center space-x-2 bg-black/75 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 shadow-2xl text-white text-xs font-medium">
-        <span className="text-[#e05344] font-black tracking-wider uppercase text-[10px]">
-          MM attendance
-        </span>
-        <span className="text-gray-500">|</span>
-        <button
-          onClick={onToggleFrame}
-          className="flex items-center space-x-1.5 text-gray-300 hover:text-white transition-colors cursor-pointer"
-        >
-          {isPhoneFrame ? (
-            <>
-              <Monitor className="w-3.5 h-3.5" />
-              <span>Full Screen</span>
-            </>
-          ) : (
-            <>
-              <Smartphone className="w-3.5 h-3.5" />
-              <span>Phone Frame</span>
-            </>
-          )}
-        </button>
-      </header>
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#0d0f14] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.18),rgba(0,0,0,0.9))] p-0 sm:p-6 overflow-hidden select-none">
+      {/* Phone Chassis Container */}
+      <div className="w-full sm:w-[390px] h-screen sm:h-[820px] sm:max-h-[94vh] bg-black sm:rounded-[50px] p-0 sm:p-3 sm:ring-1 sm:ring-white/20 sm:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_0_12px_#1c1d22] flex flex-col relative overflow-hidden transition-all duration-300">
+        
+        {/* Dynamic Island / Camera Notch (visible on desktop mockup) */}
+        <div className="hidden sm:flex absolute top-4 left-1/2 -translate-x-1/2 z-40 w-28 h-7 bg-black rounded-full items-center justify-end pr-3 space-x-2 shadow-sm pointer-events-none">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#111] ring-1 ring-zinc-800" />
+          <div className="w-2 h-2 rounded-full bg-[#1a1a2e]" />
+        </div>
 
-      {/* Main Content Area */}
-      {isPhoneFrame ? (
-        <div className="relative mt-8 sm:mt-10 mb-4 transition-all duration-300">
-          {/* Phone Shell Outer Bezel */}
-          <div className="w-[375px] h-[780px] max-h-[92vh] bg-black rounded-[48px] p-3 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.15)] ring-1 ring-white/10 flex flex-col relative overflow-hidden">
-            {/* Dynamic Island / Speaker Pill */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 w-24 h-6 bg-black rounded-full flex items-center justify-end pr-2.5 space-x-1.5 shadow-sm pointer-events-none">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#111] ring-1 ring-zinc-800" />
-            </div>
+        {/* Screen Glass */}
+        <div className="w-full h-full bg-white sm:rounded-[40px] overflow-hidden flex flex-col relative sm:pt-4">
+          {children}
 
-            {/* Phone Screen Glass */}
-            <div className="w-full h-full bg-white rounded-[38px] overflow-hidden flex flex-col relative shadow-inner pt-6">
-              {children}
-            </div>
+          {/* iOS Bottom Home Bar */}
+          <div className="w-full py-1.5 flex justify-center bg-transparent pointer-events-none sm:pb-2">
+            <div className="w-32 h-1 bg-black/80 rounded-full" />
           </div>
         </div>
-      ) : (
-        <div className="w-full max-w-md h-screen sm:h-[820px] sm:max-h-[95vh] bg-white sm:rounded-[32px] overflow-hidden flex flex-col shadow-2xl mt-10 border border-gray-200">
-          {children}
-        </div>
-      )}
+      </div>
     </div>
   );
 };
