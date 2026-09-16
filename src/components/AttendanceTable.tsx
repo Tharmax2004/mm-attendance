@@ -5,8 +5,8 @@ import { CheckSquare, Square, Search, X, Check } from 'lucide-react';
 
 interface AttendanceTableProps {
   employees: Employee[];
-  records: Record<string, AttendanceStatus>;
-  onStatusChange: (employeeId: string, status: AttendanceStatus) => void;
+  records: Record<string, AttendanceStatus[]>;
+  onStatusToggle: (employeeId: string, status: AttendanceStatus) => void;
   onBulkStatusChange: (status: AttendanceStatus | null) => void;
   onAddEmployeeClick: () => void;
 }
@@ -16,25 +16,26 @@ const STATUS_COLUMNS: AttendanceStatus[] = ['P', 'OT', 'A'];
 export const AttendanceTable: React.FC<AttendanceTableProps> = ({
   employees,
   records,
-  onStatusChange,
+  onStatusToggle,
   onBulkStatusChange,
-  onAddEmployeeClick
+  onAddEmployeeClick,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [showBulkOptions, setShowBulkOptions] = useState(false);
 
-  const filteredEmployees = employees.filter((emp) =>
-    emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    emp.role?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    emp.department?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredEmployees = employees.filter(
+    (emp) =>
+      emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      emp.role?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      emp.department?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Calculate totals for the 3 statuses
+  // Accurate counts
   const totalEmployees = employees.length;
-  const presentCount = Object.values(records).filter((s) => s === 'P').length;
-  const otCount = Object.values(records).filter((s) => s === 'OT').length;
-  const absentCount = Object.values(records).filter((s) => s === 'A').length;
+  const presentCount = Object.values(records).filter((statuses) => statuses?.includes('P')).length;
+  const otCount = Object.values(records).filter((statuses) => statuses?.includes('OT')).length;
+  const absentCount = Object.values(records).filter((statuses) => statuses?.includes('A')).length;
 
   const isAllPresent = totalEmployees > 0 && presentCount === totalEmployees;
 
@@ -84,7 +85,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
                   }}
                   className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-50 text-amber-700 font-semibold flex items-center justify-between"
                 >
-                  <span>Mark All Over time (OT)</span>
+                  <span>Add OT to All (OT)</span>
                   <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                 </button>
                 <button
@@ -111,12 +112,12 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
           </div>
         </div>
 
-        {/* Status Letters Column Headers: P, OT, A */}
-        <div className="flex items-center space-x-3 sm:space-x-4 pr-1">
+        {/* Status Letters Column Headers: P, OT, A with strict CSS Grid alignment */}
+        <div className="grid grid-cols-3 gap-2 w-32 justify-items-center pr-0.5">
           {STATUS_COLUMNS.map((status) => (
             <div
               key={status}
-              className="w-8 text-center font-black text-sm text-gray-900 tracking-tight"
+              className="font-black text-sm text-gray-900 tracking-tight text-center"
             >
               {status}
             </div>
@@ -177,7 +178,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
           </div>
         ) : (
           filteredEmployees.map((employee) => {
-            const currentStatus = records[employee.id];
+            const currentStatuses = records[employee.id] || [];
 
             return (
               <div
@@ -191,26 +192,24 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
                   </span>
                 </div>
 
-                {/* P, OT, A Status Selector Boxes */}
-                <div className="flex items-center space-x-3 sm:space-x-4 shrink-0">
+                {/* P, OT, A Status Boxes with exact grid alignment matching headers */}
+                <div className="grid grid-cols-3 gap-2 w-32 justify-items-center pr-0.5 shrink-0">
                   {STATUS_COLUMNS.map((status) => {
-                    const isSelected = currentStatus === status;
+                    const isSelected = currentStatuses.includes(status);
                     const config = STATUS_CONFIG[status];
 
                     return (
                       <button
                         key={status}
-                        onClick={() => onStatusChange(employee.id, status)}
-                        aria-label={`Mark ${employee.name} as ${config.full}`}
+                        onClick={() => onStatusToggle(employee.id, status)}
+                        aria-label={`Toggle ${config.full} for ${employee.name}`}
                         className={`w-8 h-7 rounded-[7px] flex items-center justify-center transition-all duration-150 cursor-pointer focus:outline-none ${
                           isSelected
                             ? config.activeBg
                             : 'border border-gray-400/90 bg-white hover:border-gray-700 active:scale-90'
                         }`}
                       >
-                        {isSelected && (
-                          <Check className="w-4 h-4 stroke-[3]" />
-                        )}
+                        {isSelected && <Check className="w-4 h-4 stroke-[3]" />}
                       </button>
                     );
                   })}
@@ -231,7 +230,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
         </div>
       </div>
 
-      {/* Mini Stats Bar for 3 Statuses */}
+      {/* Mini Stats Bar with Live Counts */}
       <div className="px-5 py-2 bg-gray-50/90 border-t border-gray-100 flex items-center justify-between text-[11px] font-semibold text-gray-600">
         <span className="text-emerald-700">P: {presentCount}</span>
         <span className="text-amber-700">OT: {otCount}</span>

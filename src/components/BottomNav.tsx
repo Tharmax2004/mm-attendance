@@ -67,13 +67,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             )}
           </button>
 
-          {/* Analytics / Reports Tab */}
+          {/* Reports & Analytics Tab */}
           <button
-            onClick={() => onTabChange('analytics')}
-            aria-label="Analytics & History"
+            onClick={() => onTabChange('reports')}
+            aria-label="Monthly & Yearly Reports"
             className="relative flex items-center justify-center transition-transform active:scale-90 focus:outline-none"
           >
-            {activeTab === 'analytics' ? (
+            {activeTab === 'reports' ? (
               <div className="w-10 h-10 rounded-[12px] bg-[#00f0ff] flex items-center justify-center shadow-sm">
                 <BarChart2 className="w-5 h-5 text-black stroke-[2.4]" />
               </div>

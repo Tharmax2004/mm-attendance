@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, CheckCircle2, RotateCcw, Download, RefreshCw, Calendar, Clock } from 'lucide-react';
+import { X, CheckCircle2, RotateCcw, Download, RefreshCw, Calendar, Clock, PlusCircle } from 'lucide-react';
 
 interface SideDrawerProps {
   isOpen: boolean;
@@ -10,6 +10,7 @@ interface SideDrawerProps {
   onClearCurrent: () => void;
   onResetDefaults: () => void;
   onExport: () => void;
+  onStartNewMonth: () => void;
   currentDate: string;
   currentShift: string;
 }
@@ -23,13 +24,14 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   onClearCurrent,
   onResetDefaults,
   onExport,
+  onStartNewMonth,
   currentDate,
   currentShift,
 }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-2xs animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-2xs animate-in fade-in duration-150 select-none">
       {/* Drawer Overlay backdrop */}
       <div className="absolute inset-0" onClick={onClose} />
 
@@ -74,6 +76,17 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
 
             <button
               onClick={() => {
+                onStartNewMonth();
+                onClose();
+              }}
+              className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 flex items-center space-x-2 transition-colors border border-rose-100"
+            >
+              <PlusCircle className="w-4 h-4 text-[#e05344]" />
+              <span>Start New Month</span>
+            </button>
+
+            <button
+              onClick={() => {
                 onMarkAllPresent();
                 onClose();
               }}
@@ -91,7 +104,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
               className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-amber-700 bg-amber-50/70 hover:bg-amber-100 flex items-center space-x-2 transition-colors"
             >
               <Clock className="w-4 h-4" />
-              <span>Mark All Over time (OT)</span>
+              <span>Add OT to All (OT)</span>
             </button>
 
             <button
@@ -147,7 +160,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
         {/* Footer */}
         <div className="pt-4 border-t border-gray-100 text-center">
           <div className="text-[11px] text-gray-400 font-medium">
-            MM attendance • v1.0.0
+            MM attendance • v1.2.0
           </div>
         </div>
       </div>

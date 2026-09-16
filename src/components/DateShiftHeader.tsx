@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, Clock, ChevronDown, Check } from 'lucide-react';
+import { Calendar, Clock, ChevronDown, Check, Plus } from 'lucide-react';
 
 interface DateShiftHeaderProps {
   selectedDate: string; // YYYY-MM-DD
   onDateChange: (date: string) => void;
   selectedShift: string;
   onShiftChange?: (shift: string) => void;
+  onStartNewMonthClick?: () => void;
 }
 
 export const DateShiftHeader: React.FC<DateShiftHeaderProps> = ({
   selectedDate,
   onDateChange,
   selectedShift = '09:00 am - 06:00 pm',
+  onStartNewMonthClick,
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +40,7 @@ export const DateShiftHeader: React.FC<DateShiftHeaderProps> = ({
   }, []);
 
   return (
-    <div className="px-5 pt-2 pb-3">
+    <div className="px-5 pt-2 pb-3 select-none">
       {/* Top Row: "day attendance" & Date Pill */}
       <div className="flex items-center justify-between">
         <h2 className="text-[22px] font-black tracking-tight text-gray-900 leading-none">
@@ -107,12 +109,23 @@ export const DateShiftHeader: React.FC<DateShiftHeaderProps> = ({
         </div>
       </div>
 
-      {/* Second Row: Time / Shift Pill displaying only '09:00 am - 06:00 pm' */}
-      <div className="mt-2.5 inline-block">
+      {/* Second Row: Time / Shift Pill & "Start New Month" clean button */}
+      <div className="mt-2.5 flex items-center justify-between">
         <div className="flex items-center space-x-2 px-3.5 py-1.5 bg-[#f0f0f2] text-gray-900 rounded-full text-xs sm:text-sm font-semibold shadow-xs">
           <Clock className="w-4 h-4 text-black stroke-[2.4]" />
           <span>{selectedShift || '09:00 am - 06:00 pm'}</span>
         </div>
+
+        {onStartNewMonthClick && (
+          <button
+            onClick={onStartNewMonthClick}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-[#e05344] rounded-full text-xs font-bold transition-all active:scale-95 shadow-2xs border border-rose-100"
+            title="Start New Month (clean sheet & archive)"
+          >
+            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>New Month</span>
+          </button>
+        )}
       </div>
     </div>
   );
