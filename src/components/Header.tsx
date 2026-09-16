@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Play } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 interface HeaderProps {
   onOpenMenu: () => void;
@@ -9,27 +9,23 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onOpenMenu, onPlayLogoIntro }) => {
   return (
     <header className="relative flex items-center justify-between px-4 pt-2.5 pb-2 select-none border-b border-gray-50">
-      {/* App Branding with Logo */}
+      {/* App Branding with Clean Logo */}
       <div className="flex items-center space-x-2.5">
         <button
           onClick={onPlayLogoIntro}
-          title="Click to play Logo Video Animation"
-          className="relative group p-0.5 rounded-xl bg-white border border-gray-200 shadow-2xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+          title="MM Engineering Works"
+          className="p-0.5 rounded-xl bg-white border border-gray-200 shadow-2xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
         >
           <img
             src="/logo.jpg"
             alt="MM Engineering Works Logo"
-            className="w-8 h-8 rounded-lg object-contain"
+            className="w-9 h-9 rounded-lg object-contain"
           />
-          {/* Subtle play badge indicator */}
-          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#e05344] rounded-full flex items-center justify-center text-white shadow-xs group-hover:scale-110 transition-transform">
-            <Play className="w-2 h-2 fill-current" />
-          </div>
         </button>
 
         <div className="flex flex-col">
-          <h1 className="text-[19px] font-black tracking-tight text-[#e05344] leading-tight flex items-center space-x-1">
-            <span>MM attendance</span>
+          <h1 className="text-[19px] font-black tracking-tight text-[#e05344] leading-tight">
+            MM attendance
           </h1>
           <span className="text-[9px] font-extrabold uppercase tracking-wider text-gray-400 -mt-0.5">
             Engineering Works
