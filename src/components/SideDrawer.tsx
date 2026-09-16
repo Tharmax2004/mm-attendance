@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, CheckCircle2, RotateCcw, Download, RefreshCw, Calendar, Clock, PlusCircle } from 'lucide-react';
+import { X, CheckCircle2, RotateCcw, Download, RefreshCw, Calendar, Clock, PlusCircle, Play } from 'lucide-react';
 
 interface SideDrawerProps {
   isOpen: boolean;
@@ -11,6 +11,7 @@ interface SideDrawerProps {
   onResetDefaults: () => void;
   onExport: () => void;
   onStartNewMonth: () => void;
+  onPlayLogoVideo?: () => void;
   currentDate: string;
   currentShift: string;
 }
@@ -25,6 +26,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   onResetDefaults,
   onExport,
   onStartNewMonth,
+  onPlayLogoVideo,
   currentDate,
   currentShift,
 }) => {
@@ -36,17 +38,24 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Drawer Sheet */}
-      <div className="relative w-72 max-w-full bg-white h-full shadow-2xl p-5 flex flex-col justify-between z-10 animate-in slide-in-from-right duration-200">
+      <div className="relative w-72 max-w-full bg-white h-full shadow-2xl p-5 flex flex-col justify-between z-10 animate-in slide-in-from-right duration-200 overflow-y-auto">
         <div>
-          {/* Header */}
+          {/* Header with Logo */}
           <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-            <div>
-              <h2 className="text-xl font-black text-[#e05344] tracking-tight">
-                MM attendance
-              </h2>
-              <p className="text-[11px] text-gray-500 font-medium">
-                Fast & easy attendance management
-              </p>
+            <div className="flex items-center space-x-2.5">
+              <img
+                src="/logo.jpg"
+                alt="MM Engineering Works Logo"
+                className="w-10 h-10 rounded-xl object-contain border border-gray-100 shadow-2xs p-0.5 bg-white"
+              />
+              <div>
+                <h2 className="text-lg font-black text-[#e05344] tracking-tight leading-tight">
+                  MM attendance
+                </h2>
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                  Engineering Works
+                </p>
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -73,6 +82,20 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
             <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1 mb-2">
               Quick Actions
             </div>
+
+            {/* Run Logo Video Animation Button */}
+            {onPlayLogoVideo && (
+              <button
+                onClick={() => {
+                  onPlayLogoVideo();
+                  onClose();
+                }}
+                className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-cyan-800 bg-cyan-50/80 hover:bg-cyan-100 flex items-center space-x-2 transition-colors border border-cyan-100 shadow-2xs"
+              >
+                <Play className="w-3.5 h-3.5 text-cyan-600 fill-current" />
+                <span>Play Logo Video Animation</span>
+              </button>
+            )}
 
             <button
               onClick={() => {
@@ -160,7 +183,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
         {/* Footer */}
         <div className="pt-4 border-t border-gray-100 text-center">
           <div className="text-[11px] text-gray-400 font-medium">
-            MM attendance • v1.2.0
+            MM Engineering Works • v1.3.0
           </div>
         </div>
       </div>

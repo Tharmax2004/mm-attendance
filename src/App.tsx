@@ -20,6 +20,7 @@ import { ReportsView } from './components/ReportsView';
 import { SideDrawer } from './components/SideDrawer';
 import { PhoneFrame } from './components/PhoneFrame';
 import { NewMonthModal } from './components/NewMonthModal';
+import { LogoSplash } from './components/LogoSplash';
 
 export function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -33,6 +34,7 @@ export function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
   const [isNewMonthModalOpen, setIsNewMonthModalOpen] = useState(false);
+  const [isLogoSplashOpen, setIsLogoSplashOpen] = useState(true);
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | null>(null);
   const [isExporting, setIsExporting] = useState(false);
 
@@ -184,8 +186,11 @@ export function App() {
     <PhoneFrame>
       {/* App Shell Container */}
       <div className="flex-1 flex flex-col h-full bg-white relative overflow-hidden">
-        {/* Top Header with MM Attendance Brand */}
-        <Header onOpenMenu={() => setIsMenuOpen(true)} />
+        {/* Top Header with MM Attendance Brand & Official Logo */}
+        <Header
+          onOpenMenu={() => setIsMenuOpen(true)}
+          onPlayLogoIntro={() => setIsLogoSplashOpen(true)}
+        />
 
         {/* Dynamic Content based on Active Tab */}
         {activeTab === 'attendance' && (
@@ -260,6 +265,7 @@ export function App() {
         onResetDefaults={handleResetDefaults}
         onExport={handleExport}
         onStartNewMonth={() => setIsNewMonthModalOpen(true)}
+        onPlayLogoVideo={() => setIsLogoSplashOpen(true)}
         currentDate={selectedDate}
         currentShift={selectedShift}
       />
@@ -278,6 +284,12 @@ export function App() {
         onClose={() => setIsNewMonthModalOpen(false)}
         onStartMonth={handleStartMonth}
         currentDate={selectedDate}
+      />
+
+      {/* Animated Logo Video Intro Screen */}
+      <LogoSplash
+        isOpen={isLogoSplashOpen}
+        onClose={() => setIsLogoSplashOpen(false)}
       />
     </PhoneFrame>
   );

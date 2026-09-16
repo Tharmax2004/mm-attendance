@@ -33,6 +33,20 @@
   background: rgba(156, 163, 175, 0.7);
 }
 
+/* Shimmer animation for logo intro */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.2s infinite ease-in-out;
+}
+
 /* Coral brand gradient / accents */
 .brand-coral {
   color: #e15b51;
