@@ -25,7 +25,7 @@ export function App() {
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     return new Date().toISOString().split('T')[0];
   });
-  const [selectedShift, setSelectedShift] = useState<string>('12:00 pm');
+  const [selectedShift, setSelectedShift] = useState<string>('09:00 am - 06:00 pm');
   const [records, setRecords] = useState<Record<string, AttendanceStatus>>({});
   const [activeTab, setActiveTab] = useState<ActiveTab>('attendance');
 
@@ -204,6 +204,7 @@ export function App() {
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
         onMarkAllPresent={() => handleBulkStatusChange('P')}
+        onMarkAllOvertime={() => handleBulkStatusChange('OT')}
         onMarkAllAbsent={() => handleBulkStatusChange('A')}
         onClearCurrent={() => handleBulkStatusChange(null)}
         onResetDefaults={handleResetDefaults}

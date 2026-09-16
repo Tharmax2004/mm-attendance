@@ -5,6 +5,7 @@ interface SideDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onMarkAllPresent: () => void;
+  onMarkAllOvertime: () => void;
   onMarkAllAbsent: () => void;
   onClearCurrent: () => void;
   onResetDefaults: () => void;
@@ -17,6 +18,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   isOpen,
   onClose,
   onMarkAllPresent,
+  onMarkAllOvertime,
   onMarkAllAbsent,
   onClearCurrent,
   onResetDefaults,
@@ -78,7 +80,18 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
               className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-emerald-700 bg-emerald-50/70 hover:bg-emerald-100 flex items-center space-x-2 transition-colors"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>Mark All Present</span>
+              <span>Mark All Present (P)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                onMarkAllOvertime();
+                onClose();
+              }}
+              className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-amber-700 bg-amber-50/70 hover:bg-amber-100 flex items-center space-x-2 transition-colors"
+            >
+              <Clock className="w-4 h-4" />
+              <span>Mark All Over time (OT)</span>
             </button>
 
             <button
@@ -89,7 +102,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
               className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-rose-700 bg-rose-50/70 hover:bg-rose-100 flex items-center space-x-2 transition-colors"
             >
               <X className="w-4 h-4" />
-              <span>Mark All Absent</span>
+              <span>Mark All Absent (A)</span>
             </button>
 
             <button

@@ -5,27 +5,16 @@ interface DateShiftHeaderProps {
   selectedDate: string; // YYYY-MM-DD
   onDateChange: (date: string) => void;
   selectedShift: string;
-  onShiftChange: (shift: string) => void;
+  onShiftChange?: (shift: string) => void;
 }
-
-const AVAILABLE_SHIFTS = [
-  '12:00 pm',
-  '09:00 am',
-  '02:00 pm',
-  '06:00 pm',
-  'Night Shift'
-];
 
 export const DateShiftHeader: React.FC<DateShiftHeaderProps> = ({
   selectedDate,
   onDateChange,
-  selectedShift,
-  onShiftChange,
+  selectedShift = '09:00 am - 06:00 pm',
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showShiftPicker, setShowShiftPicker] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
-  const shiftPickerRef = useRef<HTMLDivElement>(null);
 
   const todayStr = new Date().toISOString().split('T')[0];
   const isToday = selectedDate === todayStr;
@@ -37,14 +26,11 @@ export const DateShiftHeader: React.FC<DateShiftHeaderProps> = ({
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  // Close dropdowns on outside click
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (datePickerRef.current && !datePickerRef.current.contains(e.target as Node)) {
         setShowDatePicker(false);
-      }
-      if (shiftPickerRef.current && !shiftPickerRef.current.contains(e.target as Node)) {
-        setShowShiftPicker(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -121,45 +107,12 @@ export const DateShiftHeader: React.FC<DateShiftHeaderProps> = ({
         </div>
       </div>
 
-      {/* Second Row: Time / Shift Pill */}
-      <div className="mt-2.5 relative inline-block" ref={shiftPickerRef}>
-        <button
-          onClick={() => setShowShiftPicker(!showShiftPicker)}
-          className="flex items-center space-x-2 px-3.5 py-1.5 bg-[#f0f0f2] hover:bg-[#e6e6e9] active:scale-95 transition-all text-gray-900 rounded-full text-sm font-semibold shadow-xs"
-        >
+      {/* Second Row: Time / Shift Pill displaying only '09:00 am - 06:00 pm' */}
+      <div className="mt-2.5 inline-block">
+        <div className="flex items-center space-x-2 px-3.5 py-1.5 bg-[#f0f0f2] text-gray-900 rounded-full text-xs sm:text-sm font-semibold shadow-xs">
           <Clock className="w-4 h-4 text-black stroke-[2.4]" />
-          <span>{selectedShift}</span>
-          <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform ${showShiftPicker ? 'rotate-180' : ''}`} />
-        </button>
-
-        {/* Shift Picker Dropdown */}
-        {showShiftPicker && (
-          <div className="absolute left-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-200 p-2 z-50 animate-in fade-in zoom-in-95 duration-100">
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5 px-2">
-              Select Shift / Time
-            </div>
-            <div className="space-y-0.5">
-              {AVAILABLE_SHIFTS.map((shift) => {
-                const isSelected = selectedShift === shift;
-                return (
-                  <button
-                    key={shift}
-                    onClick={() => {
-                      onShiftChange(shift);
-                      setShowShiftPicker(false);
-                    }}
-                    className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
-                      isSelected ? 'bg-rose-50 text-[#e05344]' : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <span>{shift}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-[#e05344]" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+          <span>{selectedShift || '09:00 am - 06:00 pm'}</span>
+        </div>
       </div>
     </div>
   );

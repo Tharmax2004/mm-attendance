@@ -85,9 +85,8 @@ export const downloadCSV = (
     const status = records[emp.id] || 'Not Marked';
     const statusNames: Record<string, string> = {
       P: 'Present',
+      OT: 'Over time',
       A: 'Absent',
-      L: 'Leave',
-      E: 'Excused'
     };
     return [
       `"${emp.id}"`,

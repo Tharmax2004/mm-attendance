@@ -1,4 +1,4 @@
-export type AttendanceStatus = 'P' | 'A' | 'L' | 'E';
+export type AttendanceStatus = 'P' | 'OT' | 'A';
 
 export interface Employee {
   id: string;
@@ -18,7 +18,7 @@ export interface AttendanceRecord {
 
 export interface DayShiftLog {
   date: string; // YYYY-MM-DD
-  shift: string; // e.g. "12:00 pm"
+  shift: string; // e.g. "09:00 am - 06:00 pm"
   records: Record<string, AttendanceStatus>; // employeeId -> status
   lastUpdated: string;
 }
@@ -34,6 +34,14 @@ export const STATUS_CONFIG: Record<AttendanceStatus, { label: string; full: stri
     border: 'border-emerald-300',
     text: 'text-emerald-700'
   },
+  OT: {
+    label: 'OT',
+    full: 'Over time',
+    color: 'amber',
+    activeBg: 'bg-amber-500 text-white border-amber-600 shadow-sm shadow-amber-200',
+    border: 'border-amber-300',
+    text: 'text-amber-700'
+  },
   A: {
     label: 'A',
     full: 'Absent',
@@ -41,21 +49,5 @@ export const STATUS_CONFIG: Record<AttendanceStatus, { label: string; full: stri
     activeBg: 'bg-rose-500 text-white border-rose-600 shadow-sm shadow-rose-200',
     border: 'border-rose-300',
     text: 'text-rose-700'
-  },
-  L: {
-    label: 'L',
-    full: 'Leave',
-    color: 'amber',
-    activeBg: 'bg-amber-500 text-white border-amber-600 shadow-sm shadow-amber-200',
-    border: 'border-amber-300',
-    text: 'text-amber-700'
-  },
-  E: {
-    label: 'E',
-    full: 'Excused',
-    color: 'indigo',
-    activeBg: 'bg-indigo-500 text-white border-indigo-600 shadow-sm shadow-indigo-200',
-    border: 'border-indigo-300',
-    text: 'text-indigo-700'
   }
 };

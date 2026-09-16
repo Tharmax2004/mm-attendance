@@ -11,7 +11,7 @@ interface AttendanceTableProps {
   onAddEmployeeClick: () => void;
 }
 
-const STATUS_COLUMNS: AttendanceStatus[] = ['P', 'A', 'L', 'E'];
+const STATUS_COLUMNS: AttendanceStatus[] = ['P', 'OT', 'A'];
 
 export const AttendanceTable: React.FC<AttendanceTableProps> = ({
   employees,
@@ -30,12 +30,11 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
     emp.department?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Calculate totals
+  // Calculate totals for the 3 statuses
   const totalEmployees = employees.length;
   const presentCount = Object.values(records).filter((s) => s === 'P').length;
+  const otCount = Object.values(records).filter((s) => s === 'OT').length;
   const absentCount = Object.values(records).filter((s) => s === 'A').length;
-  const leaveCount = Object.values(records).filter((s) => s === 'L').length;
-  const excusedCount = Object.values(records).filter((s) => s === 'E').length;
 
   const isAllPresent = totalEmployees > 0 && presentCount === totalEmployees;
 
@@ -64,7 +63,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
 
             {/* Quick Bulk Actions Popover */}
             {showBulkOptions && (
-              <div className="absolute left-0 top-full mt-1.5 w-44 bg-white rounded-xl shadow-xl border border-gray-200 p-2 z-40 text-xs animate-in fade-in zoom-in-95">
+              <div className="absolute left-0 top-full mt-1.5 w-48 bg-white rounded-xl shadow-xl border border-gray-200 p-2 z-40 text-xs animate-in fade-in zoom-in-95">
                 <div className="font-bold text-gray-400 uppercase tracking-wider px-2 py-1 text-[10px]">
                   Bulk Actions
                 </div>
@@ -77,6 +76,16 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
                 >
                   <span>Mark All Present (P)</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                </button>
+                <button
+                  onClick={() => {
+                    onBulkStatusChange('OT');
+                    setShowBulkOptions(false);
+                  }}
+                  className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-50 text-amber-700 font-semibold flex items-center justify-between"
+                >
+                  <span>Mark All Over time (OT)</span>
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                 </button>
                 <button
                   onClick={() => {
@@ -102,12 +111,12 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
           </div>
         </div>
 
-        {/* Status Letters Column Headers: P, A, L, E */}
-        <div className="flex items-center space-x-2 sm:space-x-3 pr-1">
+        {/* Status Letters Column Headers: P, OT, A */}
+        <div className="flex items-center space-x-3 sm:space-x-4 pr-1">
           {STATUS_COLUMNS.map((status) => (
             <div
               key={status}
-              className="w-7 text-center font-black text-sm text-gray-900 tracking-tight"
+              className="w-8 text-center font-black text-sm text-gray-900 tracking-tight"
             >
               {status}
             </div>
@@ -182,8 +191,8 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
                   </span>
                 </div>
 
-                {/* P, A, L, E Status Selector Boxes */}
-                <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
+                {/* P, OT, A Status Selector Boxes */}
+                <div className="flex items-center space-x-3 sm:space-x-4 shrink-0">
                   {STATUS_COLUMNS.map((status) => {
                     const isSelected = currentStatus === status;
                     const config = STATUS_CONFIG[status];
@@ -193,7 +202,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
                         key={status}
                         onClick={() => onStatusChange(employee.id, status)}
                         aria-label={`Mark ${employee.name} as ${config.full}`}
-                        className={`w-7 h-7 rounded-[7px] flex items-center justify-center transition-all duration-150 cursor-pointer focus:outline-none ${
+                        className={`w-8 h-7 rounded-[7px] flex items-center justify-center transition-all duration-150 cursor-pointer focus:outline-none ${
                           isSelected
                             ? config.activeBg
                             : 'border border-gray-400/90 bg-white hover:border-gray-700 active:scale-90'
@@ -222,12 +231,11 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
         </div>
       </div>
 
-      {/* Mini Stats Bar */}
+      {/* Mini Stats Bar for 3 Statuses */}
       <div className="px-5 py-2 bg-gray-50/90 border-t border-gray-100 flex items-center justify-between text-[11px] font-semibold text-gray-600">
         <span className="text-emerald-700">P: {presentCount}</span>
+        <span className="text-amber-700">OT: {otCount}</span>
         <span className="text-rose-700">A: {absentCount}</span>
-        <span className="text-amber-700">L: {leaveCount}</span>
-        <span className="text-indigo-700">E: {excusedCount}</span>
         <span className="text-gray-400">Total: {totalEmployees}</span>
       </div>
     </div>
